@@ -14,10 +14,10 @@ ENV LD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/li
 ENV LAMBDA_TASK_ROOT=/var/task
 ENV LAMBDA_RUNTIME_DIR=/var/runtime
 
-RUN yum -y groupinstall "Development Tools" && yum -y install openssl openssl-devel libcurl libcurl-devel gcc72 gcc72-c++ bzip2 which
+RUN yum -y groupinstall "Development Tools" && yum -y install openssl openssl-devel libcurl libcurl-devel wget gcc72 gcc72-c++ bzip2 which
 RUN curl -O https://cmake.org/files/v3.18/cmake-3.18.0.tar.gz && tar -xvf cmake-3.18.0.tar.gz && cd cmake-3.18.0 && ./bootstrap && make -j6 install && cd .. && rm -rf cmake*
 RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2 && tar --bzip2 -xf boost_1_81_0.tar.bz2 && \
-    cd boost_1_81_0 && ./bootstrap.sh && ./b2 install
+    cd boost_1_81_0 && ./bootstrap.sh && ./b2 cxxflags="-fPIC" link=static install
 RUN git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp.git && cd aws-sdk-cpp && mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ONLY="s3" -DBUILD_SHARED_LIBS="off" .. && make -j6 install && cd ../.. && rm -rf aws-sdk-cpp
 RUN git clone https://github.com/redis/hiredis.git && cd hiredis/ && make install && cd .. && rm -rf hiredis
