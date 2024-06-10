@@ -18,7 +18,8 @@ RUN yum -y groupinstall "Development Tools" && yum -y install openssl openssl-de
 RUN curl -O https://cmake.org/files/v3.18/cmake-3.18.0.tar.gz && tar -xvf cmake-3.18.0.tar.gz && cd cmake-3.18.0 && ./bootstrap && make -j6 install && cd .. && rm -rf cmake*
 RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2
 RUN tar --bzip2 -xf boost_1_81_0.tar.bz2
-RUN cd boost_1_81_0 && ./bootstrap.sh && ./b2 install
+RUN cd boost_1_81_0 && ./bootstrap.sh
+RUN cd boost_1_81_0 && ./b2 install
 RUN git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp.git && cd aws-sdk-cpp && mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_ONLY="s3" -DBUILD_SHARED_LIBS="off" .. && make -j6 install && cd ../.. && rm -rf aws-sdk-cpp
 RUN git clone https://github.com/redis/hiredis.git && cd hiredis/ && make install && cd .. && rm -rf hiredis
